@@ -35,6 +35,7 @@ namespace ll
         void print();
         void add_circularity(int); //connects end node to the node position given, not zero indexed
         std::pair<int, bool> check_circularity_vector();
+        std::pair<int, bool> check_circularity_cycle(); //floyd cycle detection algorithm
     };
 
     template <class T>
@@ -260,6 +261,35 @@ namespace ll
             it = it->next;
         }
         return std::make_pair(0,false);
+    }
+
+    template <class T>
+    std::pair<int, bool> Linked_List<T>::check_circularity_cycle()
+    {
+        if(head == NULL)
+            return std::make_pair(0, false);
+        else
+        {
+            Node<T> *hare = head, *tortoise = head;
+            while(hare != NULL && hare->next != NULL)
+            {
+                hare = hare->next->next;
+                tortoise = tortoise->next;
+                if(hare == tortoise)
+                {
+                    int pos = 1;
+                    hare = head;
+                    while(hare != tortoise)
+                    {
+                        hare = hare->next;
+                        tortoise = tortoise->next;
+                        pos++;
+                    }
+                    return std::make_pair(pos, true);
+                }
+            }
+            return std::make_pair(0, false);
+        }
     }
 }
 
